@@ -1,0 +1,64 @@
+[DB] Attempting connection to MySQL at localhost:3306 (user: root)...
+[DB] MySQL Schema initialized successfully.
+[DB] ✅ Active MySQL Connection Established (8 tables verified).
+[Telemetry] ⚡ Real-Time Telemetry Engine started (interval: 3500ms)
+====================================================
+⚡ AI EV CHARGING DEMAND PREDICTION SERVER RUNNING
+🚀 Access Dashboard at: http://localhost:5500
+📡 Real-time WebSockets: Active on port 5500
+🗄️ Database: MySQL 8.0 (ev_charge_demand)
+====================================================
+[Socket.IO] 🔌 Client connected: fDt30hh9FqssGNoEAAAA
+[Socket.IO] 🔌 Client connected: xqvSo2MMIDWjAX43AAAB
+[Socket.IO] 🔌 Client disconnected: xqvSo2MMIDWjAX43AAAB
+[Socket.IO] 🔌 Client connected: swsOss1HhEBQjCzpAAAC
+[Socket.IO] 🔌 Client connected: 9vaO_jWuvhGjs1qMAAAD
+[Socket.IO] 🔌 Client disconnected: 9vaO_jWuvhGjs1qMAAAD
+[Socket.IO] 🔌 Client connected: J6netANsKCBW6u3FAAAE
+[Socket.IO] 🔌 Client connected: UPL9AIYaJNPBoNgeAAAF
+[Socket.IO] 🔌 Client connected: _Mw1OuV3j7NhgGBHAAAG
+[Socket.IO] 🔌 Client connected: 46PIpLr6ANVD7ARLAAAH
+[Socket.IO] 🔌 Client disconnected: 46PIpLr6ANVD7ARLAAAH
+[Socket.IO] 🔌 Client connected: E_9lmM_kp2do7JrXAAAI
+[Socket.IO] 🔌 Client connected: c7FXBINSICUDdXnhAAAJ
+[Socket.IO] 🔌 Client disconnected: J6netANsKCBW6u3FAAAE
+[Socket.IO] 🔌 Client disconnected: swsOss1HhEBQjCzpAAAC
+[Socket.IO] 🔌 Client disconnected: UPL9AIYaJNPBoNgeAAAF
+[Socket.IO] 🔌 Client disconnected: _Mw1OuV3j7NhgGBHAAAG
+[Socket.IO] 🔌 Client disconnected: c7FXBINSICUDdXnhAAAJ
+[Socket.IO] 🔌 Client disconnected: fDt30hh9FqssGNoEAAAA
+[Socket.IO] 🔌 Client disconnected: E_9lmM_kp2do7JrXAAAI
+[Socket.IO] 🔌 Client connected: waf51R5pqQ15-mAlAAAK
+[Socket.IO] 🔌 Client connected: kM9H1xFy9Em2SK46AAAL
+[Socket.IO] 🔌 Client connected: xC9P6LSW71dBLCFAAAAM
+[Socket.IO] 🔌 Client connected: zuuyikm0PsJEMSEjAAAN
+[Socket.IO] 🔌 Client disconnected: kM9H1xFy9Em2SK46AAAL
+[Socket.IO] 🔌 Client disconnected: waf51R5pqQ15-mAlAAAK
+[Socket.IO] 🔌 Client disconnected: xC9P6LSW71dBLCFAAAAM
+[Socket.IO] 🔌 Client disconnected: zuuyikm0PsJEMSEjAAAN
+[Socket.IO] 🔌 Client connected: ZunAQl2HWmv7To6DAAAO
+[Socket.IO] 🔌 Client connected: i-MxgU4qeh9Q-ivFAAAP
+[Socket.IO] 🔌 Client connected: lx86_jMSEym0IqePAAAQ
+[Socket.IO] 🔌 Client connected: AUgen3gNmGmOPp6RAAAR
+[Socket.IO] 🔌 Client disconnected: ZunAQl2HWmv7To6DAAAO
+[Socket.IO] 🔌 Client connected: -wnIKK38WO-7BzPHAAAS
+[Socket.IO] 🔌 Client connected: I7uOd0XYhdDryJSPAAAT
+[Socket.IO] 🔌 Client connected: -avvOJFCX-yGA5cCAAAU
+[Socket.IO] 🔌 Client disconnected: -avvOJFCX-yGA5cCAAAU
+[Socket.IO] 🔌 Client connected: ZvPYxPbh9Ep7zfeSAAAV
+[Socket.IO] 🔌 Client connected: 6FGrm9IU1ERxBqk-AAAW
+[Socket.IO] 🔌 Client connected: FcBwzZM_rZlmOTOsAAAX
+[Socket.IO] 🔌 Client connected: 12Kl4K3p4DSdWrQNAAAY
+[Socket.IO] 🔌 Client connected: G8WjrrfzjAByreHpAAAZ
+[Socket.IO] 🔌 Client connected: SZjnBpiFNnQk6f1LAAAa
+[Socket.IO] 🔌 Client disconnected: ZvPYxPbh9Ep7zfeSAAAV
+[Socket.IO] 🔌 Client disconnected: 6FGrm9IU1ERxBqk-AAAW
+[Socket.IO] 🔌 Client disconnected: I7uOd0XYhdDryJSPAAAT
+[Socket.IO] 🔌 Client disconnected: i-MxgU4qeh9Q-ivFAAAP
+[Socket.IO] 🔌 Client disconnected: lx86_jMSEym0IqePAAAQ
+[Socket.IO] 🔌 Client disconnected: AUgen3gNmGmOPp6RAAAR
+[Socket.IO] 🔌 Client disconnected: G8WjrrfzjAByreHpAAAZ
+[Socket.IO] 🔌 Client disconnected: 12Kl4K3p4DSdWrQNAAAY
+[Socket.IO] 🔌 Client disconnected: SZjnBpiFNnQk6f1LAAAa
+[Socket.IO] 🔌 Client disconnected: FcBwzZM_rZlmOTOsAAAX
+[Socket.IO] 🔌 Client disconnected: -wnIKK38WO-7BzPHAAAS

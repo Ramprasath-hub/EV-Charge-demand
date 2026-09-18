@@ -1,0 +1,8 @@
+[build]
+  command = "printf 'window.__API_BASE_URL = \"%s\";\n' \"$BACKEND_URL\" > runtime-config.js"
+  publish = "."
+
+[[headers]]
+  for = "/runtime-config.js"
+  [headers.values]
+    Cache-Control = "no-store"

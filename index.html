@@ -1,0 +1,1455 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#2563EB">
+  <meta name="description" content="AI-Based EV Charging Demand Prediction Dashboard - Final Year Project UI">
+  <title>EV Charge AI | Smart Charging Demand Prediction Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- App Mobile Frame Wrapper (Adaptive to Mobile & Desktop) -->
+  <div id="app-root" class="app-container">
+
+    <section id="login-screen" class="login-screen" aria-labelledby="login-title">
+      <div class="login-card">
+        <aside class="login-showcase">
+          <div class="login-brand-lockup">
+            <div class="login-leaf-mark"><i data-lucide="leaf"></i></div>
+            <div>
+              <p class="login-kicker">EV Charge AI</p>
+              <p class="login-brand-caption">Smarter journeys start here</p>
+            </div>
+          </div>
+          <div class="login-showcase-copy">
+            <p class="login-eyebrow">Welcome to your energy dashboard</p>
+            <h2>Charge cleaner.<br><em>Travel farther.</em></h2>
+            <p>Plan every stop with live availability, intelligent demand forecasts, and a calmer way to charge.</p>
+          </div>
+          <div class="login-showcase-footer">
+            <span class="login-live-dot"></span>
+            <span>Live charging intelligence across Tamil Nadu</span>
+          </div>
+        </aside>
+        <div class="login-panel">
+          <div class="login-panel-heading">
+            <p class="login-panel-kicker">Secure access</p>
+            <h1 id="login-title">Welcome back</h1>
+            <p class="login-copy" id="login-copy">Sign in with your email to see live charging availability across Tamil Nadu.</p>
+          </div>
+          <form id="auth-form" class="login-form">
+            <div class="login-field">
+              <label for="login-email">Email address</label>
+              <div class="login-input-wrap">
+                <i data-lucide="mail"></i>
+                <input id="login-email" type="email" autocomplete="email" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="login-field">
+              <label for="login-password">Password</label>
+              <div class="login-input-wrap">
+                <i data-lucide="lock-keyhole"></i>
+                <input id="login-password" type="password" autocomplete="current-password" minlength="6" placeholder="Enter your password" required>
+              </div>
+            </div>
+            <button class="login-primary-btn" type="submit" id="auth-submit-btn">Log in <i data-lucide="arrow-right"></i></button>
+            <div class="login-divider"><span>or continue with</span></div>
+            <button type="button" class="login-google-btn" id="google-auth-btn">
+              <i data-lucide="globe"></i>
+              <span>Continue with Google</span>
+            </button>
+            <div class="login-actions">
+              <button type="button" class="login-link-btn" id="auth-mode-btn">Need an account? <strong>Sign up</strong></button>
+            </div>
+          </form>
+          <p class="login-status" id="login-status" role="status"></p>
+          <p class="login-privacy"><i data-lucide="shield-check"></i> Your account is protected by Firebase Authentication.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top Fixed Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="hamburger-btn" class="icon-btn" aria-label="Open Navigation Menu" title="Open Menu">
+          <i data-lucide="menu"></i>
+        </button>
+        <div class="app-brand" id="brand-home-trigger">
+          <div class="brand-logo-badge">
+            <i data-lucide="zap" class="brand-icon"></i>
+            <span class="pulse-ring"></span>
+          </div>
+          <div class="brand-text">
+            <h1 class="brand-title">EV Charge <span class="ai-gradient-text">AI</span></h1>
+            <span class="brand-subtitle">Demand Prediction v2.4</span>
+          </div>
+        </div>
+        <nav class="top-left-nav" aria-label="Primary navigation">
+          <button class="top-nav-tab" data-tab="map" title="Charging station map">
+            <i data-lucide="map"></i>
+            <span>Map</span>
+          </button>
+          <button class="top-nav-tab" data-tab="predict" title="AI demand prediction">
+            <i data-lucide="cpu"></i>
+            <span>Predict</span>
+          </button>
+          <button class="top-nav-tab" data-tab="analytics" title="Demand analytics">
+            <i data-lucide="bar-chart-3"></i>
+            <span>Analytics</span>
+          </button>
+          <button class="top-nav-tab" data-tab="profile" title="User profile">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <div class="backend-status-tag" id="backend-status-tag" title="Real-Time Node.js & MySQL Connected">
+          <span class="live-pulse-dot"></span>
+          <span class="backend-status-label" id="backend-status-label">Node.js + MySQL Live</span>
+        </div>
+        <button id="notification-btn" class="icon-btn notif-btn" aria-label="View Notifications" title="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notif-badge">4</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Side Navigation Drawer (Requirement 11 Links) -->
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+    <aside id="side-drawer" class="side-drawer" aria-label="Main Sidebar Navigation">
+      <div class="drawer-header">
+        <div class="drawer-brand">
+          <div class="brand-logo-badge small">
+            <i data-lucide="zap" class="brand-icon"></i>
+          </div>
+          <div>
+            <div class="drawer-title">EV Charge <span class="ai-gradient-text">AI</span></div>
+            <div class="drawer-version">Final Year Project • FYP-2026</div>
+          </div>
+        </div>
+        <button id="close-drawer-btn" class="icon-btn close-btn" aria-label="Close Navigation Menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="drawer-user-card">
+        <div class="user-avatar">
+          <span id="drawer-user-initials">RP</span>
+          <span class="user-online-status"></span>
+        </div>
+        <div class="user-info">
+          <div class="user-name" id="drawer-user-name">Ramprasath (Student)</div>
+          <div class="user-ev">Tata Nexon EV Max • 40.5 kWh</div>
+        </div>
+      </div>
+
+      <nav class="drawer-nav">
+        <ul class="nav-list">
+          <li>
+            <a href="#" class="nav-item active" data-nav="home">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Home</span>
+              <span class="nav-pill">Live</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-nav="history">
+              <i data-lucide="history"></i>
+              <span>History</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-nav="map">
+              <i data-lucide="map-pin"></i>
+              <span>Charging Stations</span>
+              <span class="nav-count">28 Hubs</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-nav="predict">
+              <i data-lucide="cpu"></i>
+              <span>AI Demand Prediction</span>
+              <span class="nav-badge-ai">AI Model</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-nav="analytics">
+              <i data-lucide="bar-chart-3"></i>
+              <span>Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-action="smart-charge-modal">
+              <i data-lucide="sparkles"></i>
+              <span>Smart Charging</span>
+              <span class="nav-tag green">Save 38%</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-action="open-notifications">
+              <i data-lucide="bell-ring"></i>
+              <span>Notifications</span>
+              <span class="nav-pill red">4 New</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-action="favorite-stations-modal">
+              <i data-lucide="heart"></i>
+              <span>Favorite Stations</span>
+              <span class="nav-count" id="drawer-fav-count">4 Saved</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-nav="profile">
+              <i data-lucide="user-check"></i>
+              <span>Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-action="settings-modal">
+              <i data-lucide="settings"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li class="nav-divider"></li>
+          <li>
+            <a href="#" class="nav-item highlight" data-action="about-project-modal">
+              <i data-lucide="info"></i>
+              <span>About Project</span>
+              <span class="nav-badge-guide">FYP Info</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item logout" data-action="logout-toast">
+              <i data-lucide="log-out"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="drawer-footer">
+        <div class="ai-chip">
+          <i data-lucide="activity"></i>
+          <span>Model: Bi-LSTM Demand Forecast Engine</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Notification Dropdown / Modal (Requirement 4 Alerts) -->
+    <div id="notif-overlay" class="modal-overlay">
+      <div class="notif-panel" id="notif-panel">
+        <div class="panel-header">
+          <div class="panel-title-wrap">
+            <i data-lucide="bell" class="panel-icon"></i>
+            <h3 class="panel-title">Notifications</h3>
+            <span class="badge-pill" id="notif-count-pill">4 Alerts</span>
+          </div>
+          <div class="panel-actions">
+            <button id="mark-all-read-btn" class="btn-text">Mark all read</button>
+            <button id="close-notif-btn" class="icon-btn small"><i data-lucide="x"></i></button>
+          </div>
+        </div>
+
+        <div class="notif-list">
+          <!-- 1. High Demand Alert -->
+          <div class="notif-card priority-high unread" data-notif="high-demand">
+            <div class="notif-icon-box alert-red">
+              <i data-lucide="alert-triangle"></i>
+            </div>
+            <div class="notif-body">
+              <div class="notif-top">
+                <span class="notif-category text-red">High Demand Alert</span>
+                <span class="notif-time">5m ago</span>
+              </div>
+              <h4 class="notif-heading">Surge Demand Spike Warning</h4>
+              <p class="notif-text">Central Metro Charging Hub is predicted to reach <strong>94% capacity</strong>
+                between <strong>6:00 PM – 8:30 PM</strong>. Expect 25+ min wait time.</p>
+              <div class="notif-action-row">
+                <button class="btn-sm btn-outline" data-action="view-map-station"
+                  data-station="Central Metro Interchange EV Hub">View Alternate Hubs</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Station Availability -->
+          <div class="notif-card priority-info unread" data-notif="station-avail">
+            <div class="notif-icon-box alert-green">
+              <i data-lucide="check-circle-2"></i>
+            </div>
+            <div class="notif-body">
+              <div class="notif-top">
+                <span class="notif-category text-green">Station Availability</span>
+                <span class="notif-time">18m ago</span>
+              </div>
+              <h4 class="notif-heading">3 Ultra-Fast DC Slots Opened</h4>
+              <p class="notif-text">Tech Park Supercharge Hub has <strong>3 x 150 kW CCS2</strong> chargers available
+                now with zero queue.</p>
+              <div class="notif-action-row">
+                <button class="btn-sm btn-primary-grad" data-action="reserve-slot-quick"
+                  data-station="Tech Park Supercharge Hub">Reserve 150kW Slot</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Peak Hour Prediction -->
+          <div class="notif-card priority-amber unread" data-notif="peak-hour">
+            <div class="notif-icon-box alert-amber">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <div class="notif-body">
+              <div class="notif-top">
+                <span class="notif-category text-amber">Peak Hour Prediction</span>
+                <span class="notif-time">42m ago</span>
+              </div>
+              <h4 class="notif-heading">Evening Peak Shift Detected</h4>
+              <p class="notif-text">AI Forecast shows evening peak charging load will shift to <strong>7:15 PM – 9:00
+                  PM</strong> due to city expressway traffic flow.</p>
+              <div class="notif-action-row">
+                <button class="btn-sm btn-outline" data-action="open-peak-graph">Inspect Forecast</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Smart Charging Suggestion -->
+          <div class="notif-card priority-blue unread" data-notif="smart-suggestion">
+            <div class="notif-icon-box alert-blue">
+              <i data-lucide="zap"></i>
+            </div>
+            <div class="notif-body">
+              <div class="notif-top">
+                <span class="notif-category text-blue">Smart Charging Suggestion</span>
+                <span class="notif-time">1h ago</span>
+              </div>
+              <h4 class="notif-heading">Optimize Charging for 11:30 PM</h4>
+              <p class="notif-text">Scheduled night charging between <strong>11:30 PM – 4:00 AM</strong> will save you
+                <strong>₹165 (38% discount)</strong> on off-peak grid tariff.</p>
+              <div class="notif-action-row">
+                <button class="btn-sm btn-success-grad" data-action="schedule-smart-quick">Auto Schedule
+                  (₹8.50/kWh)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <span class="footer-note"><i data-lucide="shield-check"></i> Real-time AI Grid Event Stream (Demo)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Dynamic View Area -->
+    <main class="app-main-content" id="main-scroll-container">
+
+      <!-- ============================================== -->
+      <!-- VIEW 1: HOME TAB (DEFAULT MAIN DASHBOARD)     -->
+      <!-- ============================================== -->
+      <section id="view-home" class="tab-view active">
+
+        <!-- Live Status Bar -->
+        <div class="quick-status-bar">
+          <div class="status-chip live-chip">
+            <span class="pulsing-green-dot"></span>
+            <span class="status-title">Grid AI Online</span>
+          </div>
+          <div class="status-chip time-chip">
+            <i data-lucide="clock"></i>
+            <span id="live-clock">--:--:--</span>
+          </div>
+          <div class="status-chip zone-chip">
+            <i data-lucide="map-pin"></i>
+            <span id="selected-zone-name">Chennai Urban Grid</span>
+          </div>
+        </div>
+
+        <!-- Metric Cards Row (4 & 5) -->
+        <div class="metrics-grid">
+
+          <!-- Requirement 4: Current Charging Demand Card -->
+          <div class="glass-card demand-card" id="current-demand-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="icon-pill blue">
+                  <i data-lucide="activity"></i>
+                </div>
+                <div>
+                  <h3 class="card-title">Current Charging Demand</h3>
+                  <span class="card-subtitle">Real-time Grid Aggregate Load</span>
+                </div>
+              </div>
+              <span class="badge-status badge-high">Elevated</span>
+            </div>
+
+            <div class="demand-content">
+              <div class="demand-visual">
+                <div class="gauge-container">
+                  <svg class="gauge-svg" viewBox="0 0 120 120">
+                    <circle class="gauge-bg" cx="60" cy="60" r="50" />
+                    <circle class="gauge-fill" id="demand-gauge-fill" cx="60" cy="60" r="50" stroke-dasharray="314"
+                      stroke-dashoffset="81" />
+                  </svg>
+                  <div class="gauge-value-wrap">
+                    <span class="gauge-percentage" id="demand-percent-val">74%</span>
+                    <span class="gauge-sub">Capacity</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="demand-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Active Power Load</span>
+                  <span class="stat-val font-numeric" id="active-power-load-val">1,406 <small>kW</small></span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Substation Limit</span>
+                  <span class="stat-val font-numeric text-muted">1,900 <small>kW</small></span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Hourly Trend</span>
+                  <span class="stat-val trend-up"><i data-lucide="trending-up"></i> +12.4% vs 1hr</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="demand-footer">
+              <div class="progress-bar-wrap">
+                <div class="progress-info">
+                  <span>Grid Stress Level</span>
+                  <span class="text-amber font-semibold" id="grid-stress-label">Moderate-High</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-amber" id="grid-load-progress" style="width: 74%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Requirement 5: Available Charging Stations Card -->
+          <div class="glass-card stations-card" id="available-stations-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="icon-pill green">
+                  <i data-lucide="zap"></i>
+                </div>
+                <div>
+                  <h3 class="card-title">Available Charging Stations</h3>
+                  <span class="card-subtitle">Active Hubs in 10km Radius</span>
+                </div>
+              </div>
+              <button class="badge-action" id="open-map-filter-btn" title="View on Map">
+                <span>View Map</span>
+                <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+
+            <div class="stations-summary-grid">
+              <div class="summary-box green-tint">
+                <div class="summary-num font-numeric">28</div>
+                <div class="summary-label">Active Hubs</div>
+              </div>
+              <div class="summary-box blue-tint">
+                <div class="summary-num font-numeric">142 <span class="sub-total">/ 180</span></div>
+                <div class="summary-label">Available Ports</div>
+              </div>
+            </div>
+
+            <div class="ports-breakdown">
+              <div class="port-bar-row">
+                <div class="port-type">
+                  <span class="port-badge ultra">DC 150 kW</span>
+                  <span class="port-desc">Ultra-Fast</span>
+                </div>
+                <div class="port-avail">
+                  <div class="mini-track">
+                    <div class="mini-fill bg-blue" style="width: 68%;"></div>
+                  </div>
+                  <span class="port-count"><strong>42</strong> / 62 Free</span>
+                </div>
+              </div>
+
+              <div class="port-bar-row">
+                <div class="port-type">
+                  <span class="port-badge fast">DC 50-60 kW</span>
+                  <span class="port-desc">Fast Charger</span>
+                </div>
+                <div class="port-avail">
+                  <div class="mini-track">
+                    <div class="mini-fill bg-green" style="width: 82%;"></div>
+                  </div>
+                  <span class="port-count"><strong>56</strong> / 68 Free</span>
+                </div>
+              </div>
+
+              <div class="port-bar-row">
+                <div class="port-type">
+                  <span class="port-badge ac">AC 22 kW</span>
+                  <span class="port-desc">Level 2 Standard</span>
+                </div>
+                <div class="port-avail">
+                  <div class="mini-track">
+                    <div class="mini-fill bg-teal" style="width: 88%;"></div>
+                  </div>
+                  <span class="port-count"><strong>44</strong> / 50 Free</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <section class="glass-card power-share-card" id="dynamic-load-balancing-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill teal">
+                <i data-lucide="split"></i>
+              </div>
+              <div>
+                <h3 class="card-title">Dynamic Load Balancing</h3>
+                <span class="card-subtitle">Smart Power Share • Real-time allocation</span>
+              </div>
+            </div>
+            <span class="badge-status badge-success" id="power-share-status">Optimal</span>
+          </div>
+          <div class="power-share-grid">
+            <div class="power-share-stat">
+              <span class="stat-label">Shared per active session</span>
+              <strong class="power-share-value" id="power-share-per-session">-- <small>kW</small></strong>
+            </div>
+            <div class="power-share-stat">
+              <span class="stat-label">Available balancing headroom</span>
+              <strong class="power-share-value" id="power-share-headroom">-- <small>kW</small></strong>
+            </div>
+            <div class="power-share-stat">
+              <span class="stat-label">Active charging sessions</span>
+              <strong class="power-share-value" id="power-share-sessions">--</strong>
+            </div>
+          </div>
+          <div class="power-share-track">
+            <div class="progress-track">
+              <div class="progress-fill fill-teal" id="power-share-progress" style="width: 0%;"></div>
+            </div>
+            <span id="power-share-updated">Waiting for live grid telemetry...</span>
+          </div>
+        </section>
+
+        <!-- Requirement 10: Energy and Cost Estimation -->
+        <section class="glass-card estimation-section" id="energy-cost-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill blue">
+                <i data-lucide="calculator"></i>
+              </div>
+              <div>
+                <h3 class="card-title">Energy & Cost Estimation Calculator</h3>
+                <span class="card-subtitle">Real-time Tariff Simulation for your EV</span>
+              </div>
+            </div>
+            <span class="badge-status badge-info">Interactive</span>
+          </div>
+
+          <div class="calc-container">
+            <!-- Vehicle Selector -->
+            <div class="calc-control-group">
+              <label for="ev-model-select" class="calc-label">Select EV Model & Battery Pack</label>
+              <select id="ev-model-select" class="custom-select">
+                <option value="40.5" selected>Tata Nexon EV Max (40.5 kWh)</option>
+                <option value="75.0">Tesla Model 3 Long Range (75.0 kWh)</option>
+                <option value="50.3">MG ZS EV 2024 (50.3 kWh)</option>
+                <option value="72.6">Hyundai Ioniq 5 AWD (72.6 kWh)</option>
+                <option value="39.2">Hyundai Kona Electric (39.2 kWh)</option>
+                <option value="60.0">Custom EV Vehicle (60.0 kWh)</option>
+              </select>
+            </div>
+
+            <!-- Sliders Grid -->
+            <div class="calc-sliders-grid">
+
+              <!-- Current Battery % -->
+              <div class="slider-box">
+                <div class="slider-header">
+                  <span class="sl-title"><i data-lucide="battery-charging"></i> Current Battery</span>
+                  <span class="sl-value font-numeric text-blue" id="curr-battery-disp">20%</span>
+                </div>
+                <input type="range" min="5" max="95" value="20" class="styled-slider" id="curr-battery-slider">
+                <div class="slider-ticks">
+                  <span>5%</span><span>50%</span><span>95%</span>
+                </div>
+              </div>
+
+              <!-- Target Battery % -->
+              <div class="slider-box">
+                <div class="slider-header">
+                  <span class="sl-title"><i data-lucide="battery-full"></i> Target Battery</span>
+                  <span class="sl-value font-numeric text-green" id="target-battery-disp">85%</span>
+                </div>
+                <input type="range" min="10" max="100" value="85" class="styled-slider green"
+                  id="target-battery-slider">
+                <div class="slider-ticks">
+                  <span>10%</span><span>80% (Rec)</span><span>100%</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Charger Speed Selector -->
+            <div class="charger-speed-toggle">
+              <span class="calc-label">Select Charger Power:</span>
+              <div class="pill-segmented-control" id="calc-charger-speed">
+                <button class="seg-btn" data-speed="22">22 kW AC</button>
+                <button class="seg-btn" data-speed="50">50 kW DC</button>
+                <button class="seg-btn active" data-speed="150">150 kW Ultra</button>
+              </div>
+            </div>
+
+            <!-- Results Display Cards -->
+            <div class="calc-results-grid">
+
+              <div class="calc-result-tile">
+                <div class="tile-icon"><i data-lucide="zap"></i></div>
+                <div class="tile-label">Energy Required</div>
+                <div class="tile-val font-numeric" id="res-energy-kwh">26.3 <small>kWh</small></div>
+                <div class="tile-sub">+185 km Range Added</div>
+              </div>
+
+              <div class="calc-result-tile">
+                <div class="tile-icon"><i data-lucide="timer"></i></div>
+                <div class="tile-label">Estimated Time</div>
+                <div class="tile-val font-numeric" id="res-charge-time">24 <small>mins</small></div>
+                <div class="tile-sub" id="res-charger-label">On 150 kW DC Fast</div>
+              </div>
+
+              <div class="calc-result-tile highlight-tile">
+                <div class="tile-icon"><i data-lucide="wallet"></i></div>
+                <div class="tile-label">Estimated Cost</div>
+                <div class="tile-val font-numeric text-green" id="res-charge-cost">₹223.50</div>
+                <div class="tile-sub">Save <span id="res-saved-cost">₹138.00</span> vs Peak</div>
+              </div>
+
+              <div class="calc-result-tile">
+                <div class="tile-icon text-teal"><i data-lucide="cloud-rain"></i></div>
+                <div class="tile-label">CO2 Saved</div>
+                <div class="tile-val font-numeric text-teal" id="res-co2-saved">22.4 <small>kg</small></div>
+                <div class="tile-sub">vs Petrol Engine</div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Requirement 8: Nearby Charging Stations -->
+        <section class="glass-card nearby-section" id="nearby-stations-section">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill blue">
+                <i data-lucide="map-pin"></i>
+              </div>
+              <div>
+                <h3 class="card-title">Nearby Charging Stations</h3>
+                <span class="card-subtitle" id="nearby-gps-subtitle">Real-time Live Slot Updates via WebSocket</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="nearby-live-counter" id="nearby-live-counter">
+                <span class="pulse-dot-sm"></span>
+                <span id="nearby-total-avail">-- Free</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="nearby-filter-tabs" id="nearby-filter-tabs">
+            <button class="nf-tab active" data-filter="all">All Stations</button>
+            <button class="nf-tab" data-filter="ultra">⚡ Ultra Fast</button>
+            <button class="nf-tab" data-filter="fast">DC Fast</button>
+            <button class="nf-tab" data-filter="available">Available Now</button>
+            <button class="nf-tab" data-filter="solar">☀ Solar</button>
+          </div>
+
+          <!-- Action buttons row -->
+          <div style="display:flex;gap:8px;padding:8px 14px 0;">
+            <button class="gps-sync-btn-v2" id="nearby-gps-sync-btn" title="Sync with live GPS location">
+              <i data-lucide="crosshair"></i>
+              <span id="gps-sync-text">Live GPS</span>
+            </button>
+            <button class="view-map-pill" id="see-all-stations-btn">
+              <i data-lucide="map"></i>
+              View on Map
+            </button>
+          </div>
+
+          <!-- Station cards container (rendered by JS) -->
+          <div class="stations-scroll-list" id="nearby-stations-container">
+            <!-- Injected by renderNearbyStationsList() -->
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 2: MAP TAB (INTERACTIVE LEAFLET MAP)     -->
+      <!-- ============================================== -->
+      <section id="view-map" class="tab-view">
+        <div class="map-view-header">
+          <section class="route-planner" aria-labelledby="route-planner-title">
+            <div class="route-planner-heading">
+              <div>
+                <h2 id="route-planner-title">Navigate</h2>
+              </div>
+              <span class="route-planner-status"><i data-lucide="radio"></i> Live routing</span>
+            </div>
+            <div class="route-fields">
+              <label class="route-field">
+                <span class="route-field-label"><span class="route-marker source-marker"><i data-lucide="circle"></i></span>Source</span>
+                <div class="route-combobox">
+                  <input id="route-source-input" type="search" autocomplete="off" placeholder="Search starting point" aria-label="Select source location">
+                  <input id="route-source-value" type="hidden">
+                  <div class="route-suggestions" id="route-source-suggestions" role="listbox"></div>
+                </div>
+              </label>
+              <button type="button" class="route-swap-btn" id="route-swap-btn" title="Swap source and destination" aria-label="Swap source and destination">
+                <i data-lucide="arrow-up-down"></i>
+              </button>
+              <label class="route-field">
+                <span class="route-field-label"><span class="route-marker destination-marker"><i data-lucide="map-pin"></i></span>Destination</span>
+                <div class="route-combobox">
+                  <input id="route-destination-input" type="search" autocomplete="off" placeholder="Search destination" aria-label="Select destination location">
+                  <input id="route-destination-value" type="hidden">
+                  <div class="route-suggestions" id="route-destination-suggestions" role="listbox"></div>
+                </div>
+              </label>
+              <button type="button" class="navigate-route-btn" id="navigate-route-btn"><i data-lucide="navigation"></i><span>Navigate</span></button>
+            </div>
+            <div class="travel-mode-row" role="group" aria-label="Travel mode">
+              <button type="button" class="travel-mode-btn active" data-mode="driving"><i data-lucide="car-front"></i> Driving</button>
+              <button type="button" class="travel-mode-btn" data-mode="walking"><i data-lucide="footprints"></i> Walking</button>
+            </div>
+            <p class="route-validation-message" id="route-validation-message" role="alert" aria-live="polite"></p>
+          </section>
+        </div>
+
+        <div class="map-container-wrap">
+          <div id="leaflet-map-element"></div>
+        </div>
+        <section class="route-results" id="route-results" aria-live="polite" hidden>
+          <div class="route-results-header">
+            <div>
+              <h3 id="route-results-title">Route</h3>
+            </div>
+            <span class="route-mode-badge" id="route-mode-badge">Driving</span>
+          </div>
+          <div class="route-metrics">
+            <div class="route-metric"><i data-lucide="milestone"></i><strong id="route-distance">--</strong><span>Distance</span></div>
+            <div class="route-metric"><i data-lucide="clock-3"></i><strong id="route-duration">--</strong><span>Estimated time</span></div>
+            <div class="route-metric"><i data-lucide="signpost"></i><strong id="route-step-count">--</strong><span>Steps</span></div>
+          </div>
+          <ol class="route-directions" id="route-directions"></ol>
+        </section>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 3: ANALYTICS TAB (GRID & DEMAND INSIGHTS) -->
+      <!-- ============================================== -->
+      <section id="view-analytics" class="tab-view">
+        <div class="view-intro-header">
+          <div>
+            <h2 class="section-heading">Grid & Demand Analytics</h2>
+            <p class="section-sub">Historical trend telemetry, renewable energy integration & station utilization</p>
+          </div>
+          <span class="badge-pill blue-pill"><i data-lucide="database"></i> Simulation Engine</span>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="analytics-kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Weekly Total Energy Dispersed</div>
+            <div class="kpi-value font-numeric">184,290 <small>kWh</small></div>
+            <div class="kpi-trend positive"><i data-lucide="trending-up"></i> +8.6% vs last week</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Average Charging Session</div>
+            <div class="kpi-value font-numeric">28.4 <small>mins</small></div>
+            <div class="kpi-trend neutral"><i data-lucide="minus"></i> Optimal Throughput</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Green Energy Offset</div>
+            <div class="kpi-value font-numeric text-teal">64.2% <small>Solar/Wind</small></div>
+            <div class="kpi-trend positive"><i data-lucide="leaf"></i> 142 Tons CO2 saved</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Average Utilization Index</div>
+            <div class="kpi-value font-numeric text-blue">72.8%</div>
+            <div class="kpi-trend warning"><i data-lucide="alert-circle"></i> Peak at 8:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Weekly Load Profile Chart -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill blue"><i data-lucide="bar-chart-2"></i></div>
+              <div>
+                <h3 class="card-title">Day-wise Peak Demand Pattern</h3>
+                <span class="card-subtitle">Aggregated charging load across weekdays & weekends</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="weeklyLoadChart" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Renewable Mix Donut + Hourly Heatmap Grid -->
+        <div class="analytics-split-row">
+          <div class="glass-card split-half">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="icon-pill green"><i data-lucide="pie-chart"></i></div>
+                <div>
+                  <h3 class="card-title">Energy Source Distribution</h3>
+                  <span class="card-subtitle">Live Renewable vs Grid Power</span>
+                </div>
+              </div>
+            </div>
+            <div class="chart-wrapper donut-wrap">
+              <canvas id="energyMixChart" height="200"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card split-half">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="icon-pill amber"><i data-lucide="flame"></i></div>
+                <div>
+                  <h3 class="card-title">Hourly Congestion Heatmap</h3>
+                  <span class="card-subtitle">Station occupancy probability (00:00 - 23:00)</span>
+                </div>
+              </div>
+            </div>
+            <div class="heatmap-grid" id="congestion-heatmap">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 4: PREDICT TAB (AI DEMAND PREDICTION STUDIO)-->
+      <!-- ============================================== -->
+      <section id="view-predict" class="tab-view">
+        <div class="view-intro-header">
+          <div>
+            <h2 class="section-heading">AI Demand Prediction Studio</h2>
+            <p class="section-sub">Configure dynamic parameters to simulate EV demand load curves</p>
+          </div>
+          <span class="badge-pill ai-pill"><i data-lucide="sparkles"></i> Bi-LSTM Simulation</span>
+        </div>
+
+        <!-- Simulation Control Sandbox -->
+        <div class="glass-card studio-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill purple"><i data-lucide="sliders-horizontal"></i></div>
+              <div>
+                <h3 class="card-title">Model Input Parameters</h3>
+                <span class="card-subtitle">Adjust environmental & temporal variables to forecast load</span>
+              </div>
+            </div>
+            <div class="header-actions-row">
+              <button class="btn-sm btn-clear-sandbox" id="clear-sandbox-btn" title="Reset all simulation parameters and restore clean baseline">
+                <i data-lucide="rotate-ccw"></i> Clear Sandbox
+              </button>
+              <button class="btn-sm btn-primary-grad" id="run-ai-inference-btn">
+                <i data-lucide="play"></i> Run Simulation
+              </button>
+            </div>
+          </div>
+
+          <div class="sim-controls-grid">
+            <div class="sim-field">
+              <label for="sim-day" class="sim-label"><i data-lucide="calendar"></i> Day of Week</label>
+              <select id="sim-day" class="custom-select">
+                <option value="weekday" selected>Normal Weekday (Mon–Thu)</option>
+                <option value="friday">Friday Evening (Pre-Weekend Surge)</option>
+                <option value="weekend">Weekend (Saturday/Sunday)</option>
+                <option value="holiday">Public Holiday / Festival</option>
+              </select>
+            </div>
+
+            <div class="sim-field">
+              <label for="sim-weather" class="sim-label"><i data-lucide="cloud"></i> Weather Condition</label>
+              <select id="sim-weather" class="custom-select">
+                <option value="clear" selected>Clear & Sunny (28°C - Normal AC)</option>
+                <option value="heatwave">Extreme Heatwave (41°C - Heavy AC Load)</option>
+                <option value="rainy">Heavy Monsoonal Rain (Slow Transit)</option>
+                <option value="cold">Cool Evening (18°C)</option>
+              </select>
+            </div>
+
+            <div class="sim-field">
+              <label for="sim-zone" class="sim-label"><i data-lucide="map-pin"></i> City Hub Region</label>
+              <select id="sim-zone" class="custom-select">
+                <option value="it_corridor" selected>OMR Tech Park Corridor (High EV Density)</option>
+                <option value="central_metro">Central Commercial / Retail Zone</option>
+                <option value="highway_nh48">Highway Express Corridor (High Speed DC)</option>
+                <option value="residential">Suburban Residential Grid</option>
+              </select>
+            </div>
+
+            <div class="sim-field">
+              <label for="sim-event" class="sim-label"><i data-lucide="flag"></i> Special Event / Fleet Surge</label>
+              <select id="sim-event" class="custom-select">
+                <option value="none" selected>Standard Operations (No Event)</option>
+                <option value="stadium">Major Sports Stadium Event (+40% Surge)</option>
+                <option value="metro_strike">Public Transit Disruption (+65% EV Fleet)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation Results Visualizer -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill blue-green"><i data-lucide="cpu"></i></div>
+              <div>
+                <h3 class="card-title">Simulated Demand Load Curve</h3>
+                <span class="card-subtitle" id="sim-result-subtitle">Showing predicted profile for Weekday • Clear
+                  Weather</span>
+              </div>
+            </div>
+            <span class="badge-status badge-success" id="sim-model-status">Inference Computed</span>
+          </div>
+
+          <div class="chart-wrapper">
+            <canvas id="simulationChart" height="230"></canvas>
+          </div>
+
+          <!-- AI Model Insights Box -->
+          <div class="ai-insight-box">
+            <div class="insight-header">
+              <i data-lucide="brain"></i>
+              <span>AI Grid Balancing Recommendation</span>
+            </div>
+            <p id="sim-ai-insight-text">
+              Based on the selected parameters, demand will peak at <strong>1,780 kW (93% capacity)</strong> around
+              <strong>07:30 PM</strong>. To prevent transformer overheating, the AI system recommends shifting
+              <strong>240 kWh of fleet charging</strong> to the solar-rich 12:00 PM – 03:00 PM window via dynamic tariff
+              discounts.
+            </p>
+          </div>
+        </div>
+
+
+
+        <!-- Real-Time Battery Status -->
+        <div class="glass-card battery-status-card" id="battery-status-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill green"><i data-lucide="battery-charging"></i></div>
+              <div>
+                <h3 class="card-title">Real-Time Battery Percentage</h3>
+                <span class="card-subtitle">Current vs Target State of Charge — synced from Energy Calculator</span>
+              </div>
+            </div>
+            <span class="badge-pill green-pill"><i data-lucide="activity"></i> Live</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+            <!-- Current Battery Box -->
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <span style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">⚡ Current Battery</span>
+                <span id="batt-current-pct" style="font-size:28px;font-weight:800;color:#f59e0b;font-family:'Outfit',sans-serif;">20%</span>
+              </div>
+              <div style="height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;margin-bottom:10px;">
+                <div id="batt-current-bar" style="height:100%;width:20%;background:linear-gradient(90deg,#ef4444,#f59e0b);border-radius:99px;transition:width 0.5s ease;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                <span style="font-size:11px;color:var(--text-muted);">5%</span>
+                <span style="font-size:11px;color:var(--text-muted);">50%</span>
+                <span style="font-size:11px;color:var(--text-muted);">95%</span>
+              </div>
+            </div>
+            <!-- Target Battery Box -->
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(59,130,246,0.35);border-radius:14px;padding:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <span style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">🎯 Target Battery</span>
+                <span id="batt-target-pct" style="font-size:28px;font-weight:800;color:#10b981;font-family:'Outfit',sans-serif;">85%</span>
+              </div>
+              <div style="height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;margin-bottom:10px;">
+                <div id="batt-target-bar" style="height:100%;width:85%;background:linear-gradient(90deg,#3b82f6,#10b981);border-radius:99px;transition:width 0.5s ease;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                <span style="font-size:11px;color:var(--text-muted);">10%</span>
+                <span style="font-size:11px;color:var(--text-muted);">80% (Rec)</span>
+                <span style="font-size:11px;color:var(--text-muted);">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requirement 6: AI Demand Prediction Graph -->
+        <section class="glass-card chart-section" id="ai-prediction-graph-card">
+          <div class="card-header chart-header-row">
+            <div class="card-title-group">
+              <div class="icon-pill blue-green">
+                <i data-lucide="line-chart"></i>
+              </div>
+              <div>
+                <h3 class="card-title">AI Demand Prediction Forecast</h3>
+                <span class="card-subtitle">Bi-LSTM 24-Hour Horizon with Confidence Interval</span>
+              </div>
+            </div>
+
+            <div class="chart-controls">
+              <div class="pill-segmented-control" id="timeframe-selector">
+                <button class="seg-btn active" data-time="24h">24H</button>
+                <button class="seg-btn" data-time="7d">7 Days</button>
+                <button class="seg-btn" data-time="30d">30 Days</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <canvas id="demandForecastChart" height="240"></canvas>
+          </div>
+
+          <div class="chart-legend-custom">
+            <div class="legend-item"><span class="legend-indicator current-line"></span><span>Actual Load</span></div>
+            <div class="legend-item"><span class="legend-indicator ai-pred-line"></span><span>AI Predicted Demand</span>
+            </div>
+            <div class="legend-item"><span class="legend-indicator peak-threshold"></span><span>Grid Peak Limit (1,600
+                kW)</span></div>
+            <div class="legend-item"><span class="legend-indicator confidence-area"></span><span>Confidence Band
+                (95%)</span></div>
+          </div>
+        </section>
+
+        <!-- Requirement 7: Peak-Hour Prediction Card -->
+        <section class="glass-card peak-section" id="peak-hour-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill amber">
+                <i data-lucide="clock-alert"></i>
+              </div>
+              <div>
+                <h3 class="card-title">Peak-Hour Demand Prediction</h3>
+                <span class="card-subtitle">AI Forecasted High Load Time Windows</span>
+              </div>
+            </div>
+            <span class="badge-pill amber-pill"><i data-lucide="shield-alert"></i> 2 Peaks Today</span>
+          </div>
+
+          <div class="peak-windows-grid">
+
+            <!-- Window 1: Morning -->
+            <div class="peak-box warning-border">
+              <div class="peak-box-header">
+                <span class="peak-tag morning">Morning Rush</span>
+                <span class="peak-severity high">High Load • 88%</span>
+              </div>
+              <div class="peak-time-range font-numeric">
+                <i data-lucide="sunrise"></i>
+                <span>08:30 AM – 10:45 AM</span>
+              </div>
+              <p class="peak-desc">Office commuters hub arrival spike. Predicted wait time: <strong>15–20 mins</strong>.
+              </p>
+              <div class="peak-suggestion">
+                <i data-lucide="info"></i>
+                <span>Tip: Charge before 08:00 AM for fastest turnaround.</span>
+              </div>
+            </div>
+
+            <!-- Window 2: Evening -->
+            <div class="peak-box critical-border">
+              <div class="peak-box-header">
+                <span class="peak-tag evening">Evening Surge</span>
+                <span class="peak-severity critical">Super-Peak • 94%</span>
+              </div>
+              <div class="peak-time-range font-numeric">
+                <i data-lucide="sunset"></i>
+                <span>06:15 PM – 09:30 PM</span>
+              </div>
+              <p class="peak-desc">Major transit corridor return traffic. Grid tariff surcharge active:
+                <strong>+₹4.20/kWh</strong>.</p>
+              <div class="peak-suggestion highlight">
+                <i data-lucide="sparkles"></i>
+                <span>Optimal: Shift to 11:30 PM night window for ₹165 savings.</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Requirement 9: Smart Charging Recommendation -->
+        <section class="glass-card smart-charge-section" id="smart-recommendation-card">
+          <div class="smart-charge-glow"></div>
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill emerald">
+                <i data-lucide="sparkles"></i>
+              </div>
+              <div>
+                <h3 class="card-title">AI Smart Charging Recommendation</h3>
+                <span class="card-subtitle">Automated Grid Load Balancing & Cost Minimizer</span>
+              </div>
+            </div>
+            <span class="badge-pill green-pill"><i data-lucide="leaf"></i> Eco & Cost Optimizer</span>
+          </div>
+
+          <div class="recommendation-hero-card">
+            <div class="rec-left">
+              <div class="rec-headline">Optimal Charging Window</div>
+              <div class="rec-time-badge font-numeric">
+                <i data-lucide="moon"></i> 11:30 PM – 04:00 AM (Tonight)
+              </div>
+              <p class="rec-description">
+                Grid load will drop to <strong>31%</strong> with 100% surplus wind/hydro generation. You will save
+                <strong>38%</strong> on tariffs and prolong battery lifespan via optimal thermal charging.
+              </p>
+            </div>
+
+            <div class="rec-metrics">
+              <div class="rec-metric-item">
+                <span class="rm-label">Estimated Savings</span>
+                <span class="rm-val text-green font-numeric">₹165.00</span>
+              </div>
+              <div class="rec-metric-item">
+                <span class="rm-label">Dynamic Tariff</span>
+                <span class="rm-val font-numeric">₹8.50 <small>/ kWh</small></span>
+              </div>
+              <div class="rec-metric-item">
+                <span class="rm-label">Renewable Mix</span>
+                <span class="rm-val text-teal font-numeric">82% Green</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="smart-action-bar">
+            <button class="btn-primary-grad full-btn" id="schedule-now-btn">
+              <i data-lucide="calendar-check"></i>
+              <span>Schedule Smart Night Charging (11:30 PM)</span>
+            </button>
+            <button class="btn-outline" id="custom-schedule-btn">
+              <i data-lucide="sliders"></i>
+              <span>Adjust Preferences</span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 5: PROFILE TAB (VEHICLE & USER STATS)     -->
+      <!-- ============================================== -->
+      <section id="view-profile" class="tab-view">
+        <div class="glass-card profile-hero-card">
+          <div class="profile-hero-inner">
+            <div class="profile-avatar-large">
+              <span id="profile-user-initials">RP</span>
+              <span class="badge-verified"><i data-lucide="check"></i></span>
+            </div>
+            <div class="profile-meta">
+              <h2 class="profile-user-name" id="profile-user-name">Ramprasath</h2>
+              <p class="profile-user-email" id="profile-user-email">ramprasath.student@project.edu</p>
+              <span class="profile-role-badge"><i data-lucide="award"></i> Final Year EV Researcher • Tier 1 Eco
+                Driver</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle Specs Card -->
+        <div class="glass-card vehicle-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill blue"><i data-lucide="car"></i></div>
+              <div>
+                <h3 class="card-title">Registered Vehicle</h3>
+                <span class="card-subtitle">Connected Telematics & Battery Profile</span>
+              </div>
+            </div>
+            <span class="badge-status badge-success">Connected</span>
+          </div>
+
+          <div class="vehicle-specs-grid">
+            <div class="v-spec-item">
+              <span class="v-label">Model</span>
+              <span class="v-val">Tata Nexon EV Max</span>
+            </div>
+            <div class="v-spec-item">
+              <span class="v-label">Battery Pack</span>
+              <span class="v-val font-numeric">40.5 kWh (LFP)</span>
+            </div>
+            <div class="v-spec-item">
+              <span class="v-label">Max Fast DC Rate</span>
+              <span class="v-val font-numeric">50 kW CCS2</span>
+            </div>
+            <div class="v-spec-item">
+              <span class="v-label">Real-World Range</span>
+              <span class="v-val font-numeric">312 km</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eco Impact & Charging History -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="icon-pill green"><i data-lucide="history"></i></div>
+              <div>
+                <h3 class="card-title">Recent Charging Activity</h3>
+                <span class="card-subtitle">Last 3 completed charging sessions</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-list">
+            <div class="history-item">
+              <div class="h-icon bg-green"><i data-lucide="zap"></i></div>
+              <div class="h-details">
+                <div class="h-title">Tech Park Supercharge Hub</div>
+                <div class="h-sub">Yesterday • 28.4 kWh added (32 mins)</div>
+              </div>
+              <div class="h-cost">
+                <div class="h-amount font-numeric">₹241.40</div>
+                <span class="h-tag text-green">Off-Peak</span>
+              </div>
+            </div>
+
+            <div class="history-item">
+              <div class="h-icon bg-blue"><i data-lucide="zap"></i></div>
+              <div class="h-details">
+                <div class="h-title">Phoenix Market City Hub</div>
+                <div class="h-sub">3 days ago • 18.2 kWh added (22 mins)</div>
+              </div>
+              <div class="h-cost">
+                <div class="h-amount font-numeric">₹232.96</div>
+                <span class="h-tag text-blue">Standard</span>
+              </div>
+            </div>
+
+            <div class="history-item">
+              <div class="h-icon bg-teal"><i data-lucide="sun"></i></div>
+              <div class="h-details">
+                <div class="h-title">EcoGreen Highway Plaza</div>
+                <div class="h-sub">Last Sunday • 34.0 kWh added (35 mins)</div>
+              </div>
+              <div class="h-cost">
+                <div class="h-amount font-numeric">₹289.00</div>
+                <span class="h-tag text-teal">100% Solar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============================================== -->
+    <!-- MODALS: ABOUT PROJECT, RESERVATION, SETTINGS   -->
+    <!-- ============================================== -->
+
+    <!-- About Project Modal -->
+    <div id="about-project-modal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="icon-pill blue-green"><i data-lucide="graduation-cap"></i></div>
+            <div>
+              <h3 class="modal-title">About Final-Year Project</h3>
+              <span class="modal-subtitle">AI-Based EV Charging Demand Prediction</span>
+            </div>
+          </div>
+          <button class="icon-btn small close-modal-btn" data-close="about-project-modal"><i
+              data-lucide="x"></i></button>
+        </div>
+
+        <div class="modal-body-scroll">
+          <div class="academic-badge-banner">
+            <i data-lucide="award"></i>
+            <span>Final Year Engineering Project • Department of Computer Science & Electrical Engineering</span>
+          </div>
+
+          <div class="about-section-block">
+            <h4 class="block-title"><i data-lucide="target"></i> Project Objective</h4>
+            <p>
+              To design, develop, and evaluate an intelligent deep-learning framework (Bidirectional LSTM & XGBoost
+              ensemble) that accurately forecasts electric vehicle charging demand across urban charging stations,
+              mitigates transformer overload risks, and offers dynamic off-peak smart charging incentives to EV drivers.
+            </p>
+          </div>
+
+          <div class="about-section-block">
+            <h4 class="block-title"><i data-lucide="layers"></i> AI Architecture & Methodology</h4>
+            <ul class="methodology-list">
+              <li><strong>Temporal Forecasting:</strong> Bi-Directional Long Short-Term Memory (Bi-LSTM) networks
+                capture diurnal patterns, commute cycles, and multi-day temporal dependencies.</li>
+              <li><strong>Feature Engineering:</strong> Incorporates ambient temperature, weather severity, day-of-week
+                indicators, calendar events, dynamic electricity tariffs, and traffic congestion feeds.</li>
+              <li><strong>Load Balancing Strategy:</strong> Automated scheduling module shifts non-urgent vehicle
+                charging to renewable peak generation and grid valley periods.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-primary-grad full-btn close-modal-btn" data-close="about-project-modal">Understood</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Station Reservation Modal -->
+    <div id="reservation-modal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="icon-pill green"><i data-lucide="calendar-check"></i></div>
+            <div>
+              <h3 class="modal-title">Reserve Charging Slot</h3>
+              <span class="modal-subtitle" id="res-modal-station-name">Tech Park Supercharge Hub</span>
+            </div>
+          </div>
+          <button class="icon-btn small close-modal-btn" data-close="reservation-modal"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="modal-body-scroll">
+          <div class="reservation-preview-box">
+            <div class="r-row">
+              <span class="r-label">Selected Charger</span>
+              <span class="r-val" id="res-modal-charger-speed">150 kW DC Fast (CCS2)</span>
+            </div>
+            <div class="r-row">
+              <span class="r-label">Arrival Window</span>
+              <span class="r-val text-blue">Next 15 Minutes (Slot Held)</span>
+            </div>
+            <div class="r-row">
+              <span class="r-label">Estimated Tariff</span>
+              <span class="r-val font-numeric">₹14.50 / kWh</span>
+            </div>
+          </div>
+
+          <div class="qr-preview-card">
+            <div class="qr-box">
+              <i data-lucide="qr-code" class="qr-code-icon"></i>
+            </div>
+            <div class="qr-info">
+              <div class="qr-code-num">#EVC-RES-9824</div>
+              <p>Scan at charger terminal to initiate high-speed charging</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-primary-grad full-btn" id="confirm-reservation-btn">
+            <i data-lucide="credit-card"></i> Pay with Paytm & Reserve
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="paytm-demo-modal" class="modal-overlay">
+      <div class="modal-dialog paytm-demo-dialog">
+        <div class="paytm-demo-brand">Paytm <span>Demo Checkout</span></div>
+        <p class="paytm-demo-notice">Demo mode: no real money will be charged.</p>
+        <div class="paytm-demo-amount" id="paytm-demo-amount">₹0.00</div>
+        <p class="paytm-demo-order" id="paytm-demo-order">Order ID: --</p>
+        <div class="paytm-demo-actions">
+          <button class="btn-outline" id="paytm-demo-cancel">Cancel</button>
+          <button class="btn-primary-grad" id="paytm-demo-pay">Approve Demo Payment</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="icon-pill blue"><i data-lucide="settings"></i></div>
+            <div>
+              <h3 class="modal-title">App Settings</h3>
+              <span class="modal-subtitle">Preferences & Telemetry</span>
+            </div>
+          </div>
+          <button class="icon-btn small close-modal-btn" data-close="settings-modal"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="modal-body-scroll">
+          <div class="setting-item">
+            <div class="st-info">
+              <div class="st-title">Dark Mode Theme</div>
+              <div class="st-sub">Switch between Clean Light and Cyber Dark UI</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="theme-toggle-check">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="st-info">
+              <div class="st-title">Peak-Hour Push Alerts</div>
+              <div class="st-sub">Get notified 30 mins before grid demand surges</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked id="alerts-toggle-check">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="st-info">
+              <div class="st-title">Smart Off-Peak Auto-Schedule</div>
+              <div class="st-sub">Automatically favor 11:30 PM cheap tariff slots</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked id="smart-sched-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-primary-grad full-btn close-modal-btn" data-close="settings-modal">Save
+            Preferences</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Banner Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <!-- Runtime backend URL is generated by Netlify from BACKEND_URL. -->
+  <script src="runtime-config.js"></script>
+  <!-- Real-Time Socket.IO Client -->
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="app.js?v=custom-charger-icon-20260906"></script>
+</body>
+
+</html>
